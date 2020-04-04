@@ -10,14 +10,12 @@ public class Month {
     private int pointer;
     public int pointer () { return pointer; }
 
-    private List<List<String>> month;
-    public List<List<String>> get () { return month; }
+    private List<Day> month;
+    public List<Day> get () { return month; }
 
     public Month () {
         pointer = 0;
         month = new ArrayList<>(STORAGE_SIZE);
-        for (int i=0; i < STORAGE_SIZE; i++)
-            month.add(new ArrayList<>());
     }
 
 }
