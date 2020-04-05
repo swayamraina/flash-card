@@ -1,21 +1,15 @@
 package dev.swayamraina.flashcard.storage.entity.vo;
 
-import java.util.ArrayList;
-import java.util.List;
+import dev.swayamraina.flashcard.storage.entity.CircularBuffer;
 
 public class Month {
 
     private static final int STORAGE_SIZE = 31;
 
-    private int pointer;
-    public int pointer () { return pointer; }
+    private CircularBuffer<Day> month;
+    public CircularBuffer<Day> get () { return month; }
+    public void add (Day day) { month.add(day); }
 
-    private List<Day> month;
-    public List<Day> get () { return month; }
-
-    public Month () {
-        pointer = 0;
-        month = new ArrayList<>(STORAGE_SIZE);
-    }
+    public Month () { month = new CircularBuffer<>(STORAGE_SIZE); }
 
 }

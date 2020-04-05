@@ -1,15 +1,15 @@
 package dev.swayamraina.flashcard.storage.entity;
 
 import dev.swayamraina.flashcard.storage.entity.vo.Month;
-import dev.swayamraina.flashcard.storage.entity.vo.Today;
+import dev.swayamraina.flashcard.storage.entity.vo.Day;
 import dev.swayamraina.flashcard.storage.entity.vo.Year;
 
 import java.util.*;
 
 public class Memory {
 
-    private Today today;
-    public Today today () { return today; }
+    private Day today;
+    public Day today () { return today; }
 
     private Month month;
     public Month month () { return month; }
@@ -27,7 +27,7 @@ public class Memory {
 
     public Memory () {
         initCalendar();
-        today = new Today();
+        today = new Day();
         month = new Month();
         year  = new Year();
     }
