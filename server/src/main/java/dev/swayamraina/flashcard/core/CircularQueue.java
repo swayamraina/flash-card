@@ -3,6 +3,7 @@ package dev.swayamraina.flashcard.core;
 
 public class CircularQueue <E> {
 
+
     private int size;
     private Object[] data;
     private int head, tail;
@@ -17,21 +18,23 @@ public class CircularQueue <E> {
 
 
     public void add (E element) {
-        data[tail++] = element;
+        tail = (tail+1)%size;
+        data[tail] = element;
     }
+
 
     public E poll () {
         E element = (E) data[head];
-        head++;
+        head = (head+1)%size;
         return element;
     }
 
-    public boolean full () { return Math.abs(head-tail) == 1; }
 
+    public boolean full () { return Math.abs(head-tail) == 1; }
     public boolean notFull () { return !full(); }
 
-    public boolean empty () { return Math.abs(head-tail) == 0; }
 
+    public boolean empty () { return Math.abs(head-tail) == 0; }
     public boolean notEmpty () { return !empty(); }
 
 
