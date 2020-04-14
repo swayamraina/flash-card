@@ -4,16 +4,15 @@ import java.util.Objects;
 
 public class Queue <E> {
 
+
     private static final int QUEUE_SIZE = 16;
+
 
     private CircularQueue<E> current;
     public CircularQueue<E> current () { return this.current; }
 
     private CircularQueue<E> reserved;
     public CircularQueue<E> reserved () { return this.reserved; }
-
-    private CircularQueue<E> retry;
-    public CircularQueue<E> retry () { return this.retry; }
 
     private CircularQueue<E> failed;
     public CircularQueue<E> failed () { return this.failed; }
@@ -22,7 +21,6 @@ public class Queue <E> {
     public Queue () {
         this.current = new CircularQueue(QUEUE_SIZE);
         this.reserved = new CircularQueue(QUEUE_SIZE);
-        this.retry = new CircularQueue(QUEUE_SIZE);
         this.failed = new CircularQueue(QUEUE_SIZE);
     }
 
@@ -34,14 +32,18 @@ public class Queue <E> {
         return QCode.SUCCESS;
     }
 
+
     synchronized public E poll () {
-        E ec = null, er = null;
+        E ec = null, er = null, ef = null;
         if (current.notEmpty()) {
             ec = current.poll();
             er = reserved.poll();
+            ef = failed.poll();
             if (Objects.nonNull(er)) current.add(er);
+            if (Objects.nonNull(ef)) reserved.add(ef);
         }
         return ec;
     }
+
 
 }
