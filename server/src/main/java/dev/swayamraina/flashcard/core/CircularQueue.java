@@ -1,6 +1,8 @@
 package dev.swayamraina.flashcard.core;
 
 
+import java.util.Objects;
+
 public class CircularQueue <E> {
 
 
@@ -18,23 +20,28 @@ public class CircularQueue <E> {
 
 
     public void add (E element) {
-        tail = (tail+1)%size;
-        data[tail] = element;
+        if (Objects.nonNull(element)) {
+            data[tail] = element;
+            tail = (tail+1)%size;
+        }
     }
 
 
     public E poll () {
         E element = (E) data[head];
-        head = (head+1)%size;
+        if (Objects.nonNull(element)) {
+            data[head] = null;
+            head = (head+1)%size;
+        }
         return element;
     }
 
 
-    public boolean full () { return Math.abs(head-tail) == 1; }
+    public boolean full () { return (size-1 == tail-head) || (1 == head-tail); }
     public boolean notFull () { return !full(); }
 
 
-    public boolean empty () { return Math.abs(head-tail) == 0; }
+    public boolean empty () { return (0 == head-tail); }
     public boolean notEmpty () { return !empty(); }
 
 
