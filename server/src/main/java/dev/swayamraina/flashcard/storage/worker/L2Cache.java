@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
-@Service public class MemoryCache {
+@Service public class L2Cache {
 
     private Memory memory;
     public Memory memory () { return memory; }
@@ -35,6 +35,10 @@ import java.util.Date;
             memory.year().add(prevMonth);
         }
         memory.today().flush();
+    }
+
+    public boolean exists (String url) {
+        return true;
     }
 
 }
