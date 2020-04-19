@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 
+@RequestMapping (Routes.BASE_URL)
 @RestController public class Handler {
 
 
@@ -25,7 +26,9 @@ import java.util.Objects;
     }
 
 
-    @PostMapping public Response<Boolean> add (@RequestBody FlashCard card) {
+    @PostMapping (Routes.APP.SAVE_LINK) public Response<Boolean> add (
+            @RequestBody FlashCard card) {
+
         if (Objects.isNull(card) || Objects.isNull(card.url()))
             return FAILURE;
 
@@ -34,17 +37,22 @@ import java.util.Objects;
     }
 
 
-    @GetMapping public Response<List<String>> get () {
-        orchestrator.get();
-        return null;
+    @GetMapping (Routes.APP.GET_LINKS) public Response<List<String>> get (
+            @RequestParam ("offset") int offset) {
+
+        if (0 > offset) offset = 0;
+        List<String> urls = orchestrator.get(offset);
+        return new Response<>(urls);
     }
 
 
-    @GetMapping public Response<Boolean> exists (@RequestParam String url) {
+    @GetMapping (Routes.APP.LINK_EXISTS) public Response<Boolean> exists (
+            @RequestParam ("url") String url) {
+
         if (StringUtils.isEmpty(url))
             return FAILURE;
 
-        boolean exists = orchestrator.exists();
+        boolean exists = orchestrator.exists(url);
         return exists ? SUCCESS : FAILURE;
     }
 
