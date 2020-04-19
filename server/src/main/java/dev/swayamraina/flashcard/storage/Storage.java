@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service public class Storage {
 
@@ -43,6 +44,10 @@ import java.util.Date;
         boolean exists = l1cache.exists(url);
         if (exists) exists = l2cache.exists(url);
         return exists;
+    }
+
+    public List<String> get (int offset) {
+        return l2cache.get(offset);
     }
 
 }

@@ -7,6 +7,7 @@ import dev.swayamraina.flashcard.web.response.vo.FlashCard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 
 
 @Service public class Orchestrator {
@@ -27,14 +28,12 @@ import org.springframework.stereotype.Service;
         return QCode.SUCCESS == code;
     }
 
-
-    public void get () {
-
+    public List<String> get (int offset) {
+        return storage.get(offset);
     }
 
-
-    public Boolean exists () {
-        return null;
+    public Boolean exists (String url) {
+        return storage.exists(url);
     }
 
 

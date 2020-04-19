@@ -1,13 +1,16 @@
 package dev.swayamraina.flashcard.storage.worker;
 
 import dev.swayamraina.flashcard.storage.SCode;
+import dev.swayamraina.flashcard.storage.entity.CircularBuffer;
 import dev.swayamraina.flashcard.storage.entity.Memory;
 import dev.swayamraina.flashcard.storage.entity.vo.Day;
 import dev.swayamraina.flashcard.storage.entity.vo.Month;
 import dev.swayamraina.flashcard.utils.Utils;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service public class L2Cache {
 
@@ -39,6 +42,23 @@ import java.util.Date;
 
     public boolean exists (String url) {
         return true;
+    }
+
+    public List<String> get (int offset) {
+        List<String> urls = new ArrayList<>();
+
+        if (0 == offset)
+            urls.addAll(memory.today().get());
+
+        if (31 > offset && offset > 0) {
+            CircularBuffer<Day> month = memory.month().get();
+            int pointer = month.pointer();
+            int query = pointer - offset;
+            if (0 > query) query += month.size();
+            urls.addAll(month.get(query).get());
+        }
+
+        return urls;
     }
 
 }

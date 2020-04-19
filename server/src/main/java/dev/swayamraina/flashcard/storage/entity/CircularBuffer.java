@@ -22,4 +22,11 @@ public class CircularBuffer <E> {
         previous = null;
     }
 
+    public E get (int index) {
+        return (E) data[index];
+    }
+
+    public int pointer () { return pointer; }
+    public int size () { return size; }
+
 }
