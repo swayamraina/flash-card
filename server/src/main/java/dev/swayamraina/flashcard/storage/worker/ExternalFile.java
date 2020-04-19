@@ -21,8 +21,7 @@ import java.util.Optional;
 
     public SCode add (FlashCard card, Date today) {
         boolean valid, exists;
-        String api;
-        api = github.url(today);
+        String api = github.resourceUrl(today);
         Optional<Resource> resource = github.read(api);
         valid = resource.isPresent() && resource.get().valid();
         if (valid) {

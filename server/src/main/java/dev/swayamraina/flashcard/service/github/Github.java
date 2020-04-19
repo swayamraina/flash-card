@@ -73,7 +73,7 @@ import static dev.swayamraina.flashcard.utils.Constants.*;
         return Optional.of(resource);
     }
 
-    public String url (Date today) {
+    public String resourceUrl (Date today) {
         String[] vars = DATE_FORMATTER.format(today).split(HYPHEN);
         return String.format (
                 RESOURCE_URL,
@@ -82,6 +82,15 @@ import static dev.swayamraina.flashcard.utils.Constants.*;
                 vars[0],
                 vars[1],
                 vars[2]
+        );
+    }
+
+    public String hashRingUrl (int hash) {
+        return String.format (
+                HASH_RING_URL,
+                config.username(),
+                config.repo(),
+                hash
         );
     }
 
@@ -111,6 +120,22 @@ import static dev.swayamraina.flashcard.utils.Constants.*;
                 Utils.b64encode(content),
                 sha,
                 Utils.commitMessage(response),
+                committer
+        );
+    }
+
+    public Request request (String url, Resource resource)  {
+        String content = null, sha = null;
+        if (resource.exists()) {
+            content = Utils.b64decode(resource.content());
+            content += NEWLINE + url;
+            sha = resource.sha();
+        }
+        return new Request (
+                SCode.UNKNOWN,
+                Utils.b64encode(content),
+                sha,
+                url,
                 committer
         );
     }

@@ -1,6 +1,7 @@
 package dev.swayamraina.flashcard.storage;
 
 import dev.swayamraina.flashcard.storage.worker.ExternalFile;
+import dev.swayamraina.flashcard.storage.worker.HashRing;
 import dev.swayamraina.flashcard.storage.worker.L2Cache;
 import dev.swayamraina.flashcard.storage.worker.L1Cache;
 import dev.swayamraina.flashcard.web.response.vo.FlashCard;
@@ -13,15 +14,18 @@ import java.util.Date;
 
     private L1Cache l1cache;
     private L2Cache l2cache;
+    private HashRing hashRing;
     private ExternalFile file;
 
     @Autowired public Storage (
             L1Cache l1cache,
             L2Cache l2cache,
+            HashRing hashRing,
             ExternalFile file) {
 
         this.l1cache = l1cache;
         this.l2cache = l2cache;
+        this.hashRing = hashRing;
         this.file = file;
     }
 

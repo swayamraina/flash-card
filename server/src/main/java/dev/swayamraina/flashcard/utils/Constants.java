@@ -20,6 +20,8 @@ public class Constants {
 
     public static final String COMMA = ", ";
 
+    public static final String NEWLINE = "\n";
+
     public static final Resource INVALID_RESOURCE = new Resource (GCode.INVALID, EMPTY, EMPTY);
 
     public static final Committer UNKNOWN_COMMITTER = new Committer (EMPTY, EMPTY);
@@ -38,6 +40,10 @@ public class Constants {
      *      5. date (DD)
      **/
     public static final String RESOURCE_URL = "https://api.github.com/repos/%s/%s/contents/%s/%s/FC-%s.json";
+
+    public static final String HASH_RING_URL = "https://api.github.com/repos/%s/%s/contents/.db/hash/%s";
+
+    public static final String BLOOM_FILTER_URL = "https://api.github.com/repos/%s/%s/contents/.db/bloom";
 
     public static final String DATE_FILE_FORMAT = "yyyy-MMMM-dd";
 
