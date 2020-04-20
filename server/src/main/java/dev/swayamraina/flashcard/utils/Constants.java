@@ -1,7 +1,5 @@
 package dev.swayamraina.flashcard.utils;
 
-import dev.swayamraina.flashcard.service.github.GCode;
-import dev.swayamraina.flashcard.service.github.entity.Resource;
 import dev.swayamraina.flashcard.service.github.request.Committer;
 import dev.swayamraina.flashcard.service.github.request.Request;
 import dev.swayamraina.flashcard.storage.SCode;
@@ -21,8 +19,6 @@ public class Constants {
     public static final String COMMA = ", ";
 
     public static final String NEWLINE = "\n";
-
-    public static final Resource INVALID_RESOURCE = new Resource (GCode.INVALID, EMPTY, EMPTY);
 
     public static final Committer UNKNOWN_COMMITTER = new Committer (EMPTY, EMPTY);
 

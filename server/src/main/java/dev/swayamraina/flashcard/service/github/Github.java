@@ -1,6 +1,7 @@
 package dev.swayamraina.flashcard.service.github;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.swayamraina.flashcard.service.github.entity.Config;
 import dev.swayamraina.flashcard.service.github.entity.Resource;
@@ -13,19 +14,20 @@ import dev.swayamraina.flashcard.web.response.vo.FlashCard;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static dev.swayamraina.flashcard.utils.Constants.*;
 
 @Service public class Github {
+
+    public static final Resource INVALID_RESOURCE = new Resource (GCode.INVALID, EMPTY, EMPTY);
+    public static final Resource NO_RESOURCE = new Resource (GCode.DOES_NOT_EXISTS, EMPTY, EMPTY);
+    public static final Resource RESOURCE_CREATED = new Resource (GCode.CREATED, EMPTY, EMPTY);
+
 
     private Config config;
     private Committer committer;
@@ -34,7 +36,7 @@ import static dev.swayamraina.flashcard.utils.Constants.*;
     public Github (Config config) {
         this.config = config;
         this.committer = new Committer(config.username(), config.email());
-        this.mapper = new ObjectMapper();
+        this.mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     public Optional<Resource> create (String url, Request data) { return submit(url, data); }
@@ -42,34 +44,30 @@ import static dev.swayamraina.flashcard.utils.Constants.*;
     public Optional<Resource> update (String url, Request data) { return submit(url, data); }
 
     public Optional<Resource> read (String url) {
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response;
+        Resource resource = RESOURCE_CREATED;
         try {
-            response = restTemplate.getForEntity(url, String.class);
+            new RestTemplate().getForEntity(url, String.class);
         } catch (RestClientException rce) {
-            return Optional.of(INVALID_RESOURCE);
+            resource = NO_RESOURCE;
         }
-        Resource resource = null;
         return Optional.of(resource);
     }
 
     private Optional<Resource> submit (String url, Request data) {
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response;
+        Resource resource = RESOURCE_CREATED;
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.add(HEADER_AUTH_KEY, String.format(HEADER_AUTH_VALUE, config.token()));
             HttpEntity<Request> entity = new HttpEntity<>(data, headers);
-            response = restTemplate.exchange (
+            new RestTemplate().exchange (
                     url,
                     HttpMethod.PUT,
                     entity,
                     String.class
             );
         } catch (RestClientException rce) {
-            return Optional.of(INVALID_RESOURCE);
+            resource = INVALID_RESOURCE;
         }
-        Resource resource = null;
         return Optional.of(resource);
     }
 
@@ -106,7 +104,7 @@ import static dev.swayamraina.flashcard.utils.Constants.*;
             }
             sha = resource.sha();
         }
-        if (Objects.isNull(response)) response = new Response(Arrays.asList());
+        if (Objects.isNull(response)) response = new Response(new ArrayList<>());
         response.cards().add(card);
 
         try {
