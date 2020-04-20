@@ -8,14 +8,14 @@ import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 
-import static dev.swayamraina.flashcard.utils.Constants.COMMA;
+import static dev.swayamraina.flashcard.utils.Constants.*;
 
 
 public class Utils {
 
     public static boolean isNewDay (Calendar calendar, Date date) {
         int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
-        int incomingDay = date.getDay();
+        int incomingDay = date.getDate();
         return incomingDay != currentDay;
     }
 
@@ -30,6 +30,7 @@ public class Utils {
     }
 
     public static String b64decode (String b64data) {
+        b64data = b64data.replaceAll(NEWLINE, EMPTY);
         return new String(Base64.getDecoder().decode(b64data));
     }
 
