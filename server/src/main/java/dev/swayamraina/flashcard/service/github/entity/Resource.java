@@ -11,9 +11,14 @@ public class Resource {
 
     private String sha;
     public String sha () { return sha; }
+    public String getSha() { return sha; }
 
     private String content;
     public String content () { return content; }
+    public String getContent() { return content; }
+
+
+    private Resource () { this.valid = GCode.EXISTS; }
 
     public Resource (GCode valid, String sha, String content) {
         this.valid = valid;

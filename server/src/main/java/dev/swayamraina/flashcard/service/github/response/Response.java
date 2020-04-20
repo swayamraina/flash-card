@@ -8,6 +8,8 @@ public class Response {
 
     private List<FlashCard> cards;
     public List<FlashCard> cards () { return cards; }
+    public List<FlashCard> getCards () { return cards; }
+
 
     private Response () {}
 
