@@ -11,6 +11,7 @@ import dev.swayamraina.flashcard.service.github.response.Response;
 import dev.swayamraina.flashcard.storage.SCode;
 import dev.swayamraina.flashcard.utils.Utils;
 import dev.swayamraina.flashcard.web.response.vo.FlashCard;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -24,6 +25,7 @@ import static dev.swayamraina.flashcard.utils.Constants.*;
 
 @Service public class Github {
 
+
     public static final Resource INVALID_RESOURCE = new Resource (GCode.INVALID, EMPTY, EMPTY);
     public static final Resource NO_RESOURCE = new Resource (GCode.DOES_NOT_EXISTS, EMPTY, EMPTY);
     public static final Resource RESOURCE_CREATED = new Resource (GCode.CREATED, EMPTY, EMPTY);
@@ -33,25 +35,28 @@ import static dev.swayamraina.flashcard.utils.Constants.*;
     private Committer committer;
     private ObjectMapper mapper;
 
-    public Github (Config config) {
+
+    @Autowired public Github (Config config) {
         this.config = config;
         this.committer = new Committer(config.username(), config.email());
         this.mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
-    public Optional<Resource> create (String url, Request data) { return submit(url, data); }
 
+    public Optional<Resource> create (String url, Request data) { return submit(url, data); }
     public Optional<Resource> update (String url, Request data) { return submit(url, data); }
 
+
     public Optional<Resource> read (String url) {
-        Resource resource = RESOURCE_CREATED;
+        Resource resource;
         try {
-            new RestTemplate().getForEntity(url, String.class);
+            resource = new RestTemplate().getForEntity(url, Resource.class).getBody();
         } catch (RestClientException rce) {
             resource = NO_RESOURCE;
         }
         return Optional.of(resource);
     }
+
 
     private Optional<Resource> submit (String url, Request data) {
         Resource resource = RESOURCE_CREATED;
@@ -71,6 +76,7 @@ import static dev.swayamraina.flashcard.utils.Constants.*;
         return Optional.of(resource);
     }
 
+
     public String resourceUrl (Date today) {
         String[] vars = DATE_FORMATTER.format(today).split(HYPHEN);
         return String.format (
@@ -83,6 +89,7 @@ import static dev.swayamraina.flashcard.utils.Constants.*;
         );
     }
 
+
     public String hashRingUrl (int hash) {
         return String.format (
                 HASH_RING_URL,
@@ -92,8 +99,9 @@ import static dev.swayamraina.flashcard.utils.Constants.*;
         );
     }
 
+
     public Request request (FlashCard card, Resource resource) {
-        String content = null, sha = null;
+        String content, sha = null;
         Response response = null;
         if (resource.exists()) {
             content = Utils.b64decode(resource.content());
@@ -122,11 +130,11 @@ import static dev.swayamraina.flashcard.utils.Constants.*;
         );
     }
 
+
     public Request request (String url, Resource resource)  {
-        String content = null, sha = null;
+        String content = url, sha = null;
         if (resource.exists()) {
-            content = Utils.b64decode(resource.content());
-            content += NEWLINE + url;
+            content += NEWLINE + Utils.b64decode(resource.content());
             sha = resource.sha();
         }
         return new Request (
@@ -137,5 +145,6 @@ import static dev.swayamraina.flashcard.utils.Constants.*;
                 committer
         );
     }
+
 
 }
