@@ -20,16 +20,16 @@ import java.util.Optional;
     }
 
     public SCode add (FlashCard card, Date today) {
-        boolean valid, exists;
+        boolean exists;
         String api = github.resourceUrl(today);
         Optional<Resource> resource = github.read(api);
-        valid = resource.isPresent() && resource.get().valid();
-        if (valid) {
-            exists = resource.get().exists();
-            Request request = github.request(card, resource.get());
-            if (request.invalid()) return SCode.ERROR;
-            resource = exists ? github.update(api, request) : github.create(api, request);
-        }
+        exists = resource.isPresent() && resource.get().exists();
+        Request request = github.request(card, resource.get());
+
+        if (request.invalid())
+            return SCode.ERROR;
+
+        resource = exists ? github.update(api, request) : github.create(api, request);
         return resource.isPresent() && resource.get().valid() ? SCode.SAVED_TO_FILE : SCode.ERROR;
     }
 
