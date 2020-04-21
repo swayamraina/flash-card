@@ -35,10 +35,12 @@ import java.util.List;
         if (!exists(card.url(), true)) {
             Date today = new Date();
             code = file.add(card, today);
-            if (SCode.SAVED_TO_FILE == code) {
-                l1cache.add(card.url());
+            if (SCode.SAVED_TO_FILE == code)
+                code = hashRing.add(card.url());
+            if (SCode.SAVED_TO_HASH_RING == code)
+                code = l1cache.add(card.url());
+            if (SCode.SAVED_TO_BLOOM_FILTER == code)
                 code = l2cache.add(card.url(), today);
-            }
         }
         return code;
     }
