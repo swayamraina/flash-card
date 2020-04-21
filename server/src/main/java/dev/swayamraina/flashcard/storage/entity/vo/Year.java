@@ -12,4 +12,13 @@ public class Year {
 
     public Year () { year = new CircularBuffer<>(STORAGE_SIZE); }
 
+    public boolean exists (String url) {
+        boolean exists = false;
+        for (int i=0; i<STORAGE_SIZE; i++) {
+            exists = year.get(i).exists(url);
+            if (exists) break;
+        }
+        return exists;
+    }
+
 }

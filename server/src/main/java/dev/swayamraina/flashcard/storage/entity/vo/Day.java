@@ -7,8 +7,6 @@ public class Day {
 
     private Set<String> day;
     public Set<String> get () { return day; }
-    public void add (String url) { day.add(url); }
-    public void flush () { day.clear(); }
 
     public Day () { day = new HashSet<>(); }
 

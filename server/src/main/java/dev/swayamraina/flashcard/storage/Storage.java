@@ -31,18 +31,24 @@ import java.util.List;
     }
 
     public SCode add (FlashCard card) {
-        Date today = new Date();
-        SCode code = file.add(card, today);
-        if (SCode.SAVED_TO_FILE == code) {
-            l1cache.add(card.url());
-            code = l2cache.add(card.url(), today);
+        SCode code = SCode.SAVED;
+        if (!exists(card.url(), true)) {
+            Date today = new Date();
+            code = file.add(card, today);
+            if (SCode.SAVED_TO_FILE == code) {
+                l1cache.add(card.url());
+                code = l2cache.add(card.url(), today);
+            }
         }
         return code;
     }
 
-    public boolean exists (String url) {
+    public boolean exists (String url, boolean deep) {
         boolean exists = l1cache.exists(url);
-        if (exists) exists = l2cache.exists(url);
+        if (exists) {
+            exists = l2cache.exists(url);
+            if (deep && !exists) exists = hashRing.exists(url);
+        }
         return exists;
     }
 

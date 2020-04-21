@@ -33,7 +33,7 @@ import java.util.List;
     }
 
     public Boolean exists (String url) {
-        return storage.exists(url);
+        return storage.exists(url, false);
     }
 
 

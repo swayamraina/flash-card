@@ -12,4 +12,13 @@ public class Month {
 
     public Month () { month = new CircularBuffer<>(STORAGE_SIZE); }
 
+    public boolean exists (String url) {
+        boolean exists = false;
+        for (int i=0; i<STORAGE_SIZE; i++) {
+            exists = month.get(i).get().contains(url);
+            if (exists) break;
+        }
+        return exists;
+    }
+
 }

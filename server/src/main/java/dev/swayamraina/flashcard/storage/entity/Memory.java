@@ -9,13 +9,16 @@ import java.util.*;
 public class Memory {
 
     private Day today;
-    public Day today () { return today; }
+    public Day dayHolder () { return today; }
+    public Set<String> today () { return today.get(); }
 
     private Month month;
-    public Month month () { return month; }
+    public Month monthHolder () { return month; }
+    public CircularBuffer<Day> month () { return month.get(); }
 
     private Year year;
-    public Year year () { return year; }
+    public Year yearHolder () { return year; }
+    public CircularBuffer<Month> year () { return year.get(); }
 
     private Calendar calendar;
     public Calendar calendar () { return calendar; }
