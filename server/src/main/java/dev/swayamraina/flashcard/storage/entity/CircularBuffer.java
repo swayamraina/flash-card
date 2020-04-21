@@ -22,8 +22,19 @@ public class CircularBuffer <E> {
         previous = null;
     }
 
-    public E get (int index) {
-        return (E) data[index];
+    public E get (int index) { return (E) data[index]; }
+
+    public boolean exists (E element) {
+        boolean exists = false;
+        for (Object d : data) {
+            if (null == d) continue;
+            E e = (E) d;
+            if (e.equals(element)) {
+                exists = true;
+                break;
+            }
+        }
+        return exists;
     }
 
     public int pointer () { return pointer; }
