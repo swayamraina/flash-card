@@ -6,6 +6,8 @@ public enum GCode {
 
     EXISTS,
 
+    DOES_NOT_EXISTS,
+
     CREATED,
 
     UPDATED,
