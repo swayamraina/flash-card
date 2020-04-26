@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.swayamraina.flashcard.service.github.entity.Config;
 import dev.swayamraina.flashcard.service.github.entity.Resource;
+import dev.swayamraina.flashcard.service.github.entity.ResourceResponse;
 import dev.swayamraina.flashcard.service.github.request.Committer;
 import dev.swayamraina.flashcard.service.github.request.Request;
 import dev.swayamraina.flashcard.service.github.response.Response;
@@ -28,7 +29,6 @@ import static dev.swayamraina.flashcard.utils.Constants.*;
 
     public static final Resource INVALID_RESOURCE = new Resource (GCode.INVALID, EMPTY, EMPTY);
     public static final Resource NO_RESOURCE = new Resource (GCode.DOES_NOT_EXISTS, EMPTY, EMPTY);
-    public static final Resource RESOURCE_CREATED = new Resource (GCode.CREATED, EMPTY, EMPTY);
 
 
     private Config config;
@@ -43,8 +43,8 @@ import static dev.swayamraina.flashcard.utils.Constants.*;
     }
 
 
-    public Optional<Resource> create (String url, Request data) { return submit(url, data); }
-    public Optional<Resource> update (String url, Request data) { return submit(url, data); }
+    public Optional<Resource> create (String url, Request data) { return submit(url, data, Boolean.TRUE); }
+    public Optional<Resource> update (String url, Request data) { return submit(url, data, Boolean.FALSE); }
 
 
     public Optional<Resource> read (String url) {
@@ -58,17 +58,22 @@ import static dev.swayamraina.flashcard.utils.Constants.*;
     }
 
 
-    private Optional<Resource> submit (String url, Request data) {
-        Resource resource = RESOURCE_CREATED;
+    private Optional<Resource> submit (String url, Request data, boolean create) {
+        Resource resource;
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.add(HEADER_AUTH_KEY, String.format(HEADER_AUTH_VALUE, config.token()));
             HttpEntity<Request> entity = new HttpEntity<>(data, headers);
-            new RestTemplate().exchange (
+            ResourceResponse response = new RestTemplate().exchange (
                     url,
                     HttpMethod.PUT,
                     entity,
-                    String.class
+                    ResourceResponse.class
+            ).getBody();
+            resource = new Resource (
+                    create ? GCode.CREATED : GCode.UPDATED,
+                    response.sha(),
+                    EMPTY
             );
         } catch (RestClientException rce) {
             resource = INVALID_RESOURCE;
@@ -96,6 +101,25 @@ import static dev.swayamraina.flashcard.utils.Constants.*;
                 config.username(),
                 config.repo(),
                 hash
+        );
+    }
+
+
+    public String bloomUrl (String name, boolean read) {
+        return String.format (
+                read ? BLOOM_FILTER_READ_URL : BLOOM_FILTER_WRITE_URL,
+                config.username(),
+                config.repo(),
+                name
+        );
+    }
+
+
+    public String bloomShaUrl () {
+        return String.format (
+                BLOOM_SHA_URL,
+                config.username(),
+                config.repo()
         );
     }
 
@@ -146,5 +170,15 @@ import static dev.swayamraina.flashcard.utils.Constants.*;
         );
     }
 
+
+    public Request request (String content, String sha) {
+        return new Request (
+                SCode.UNKNOWN,
+                Utils.b64encode(content),
+                sha,
+                SYNC_MESSAGE.format(new Date().toString()),
+                committer
+        );
+    }
 
 }
