@@ -2,6 +2,8 @@ package dev.swayamraina.flashcard.storage.entity.vo;
 
 import dev.swayamraina.flashcard.storage.entity.CircularBuffer;
 
+import java.util.Objects;
+
 public class Year {
 
     private static final int STORAGE_SIZE = 12;
@@ -15,7 +17,9 @@ public class Year {
     public boolean exists (String url) {
         boolean exists = false;
         for (int i=0; i<STORAGE_SIZE; i++) {
-            exists = year.get(i).exists(url);
+            if (Objects.nonNull(year.get(i))) {
+                exists = year.get(i).exists(url);
+            }
             if (exists) break;
         }
         return exists;
