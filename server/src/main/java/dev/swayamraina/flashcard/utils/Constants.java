@@ -5,6 +5,7 @@ import dev.swayamraina.flashcard.service.github.request.Request;
 import dev.swayamraina.flashcard.storage.SCode;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Constants {
 
@@ -16,7 +17,9 @@ public class Constants {
 
     public static final String HYPHEN = "-";
 
-    public static final String COMMA = ", ";
+    public static final String COMMA = ",";
+
+    public static final String SPACE = " ";
 
     public static final String NEWLINE = "\n";
 
@@ -35,14 +38,20 @@ public class Constants {
      *      4. month name (MMMM)
      *      5. date (DD)
      **/
-    public static final String RESOURCE_URL = "https://api.github.com/repos/%s/%s/contents/%s/%s/FC-%s.json";
+    public static final String RESOURCE_URL = "https://api.github.com/repos/%s/%s/contents/%s/%s/%s";
 
     public static final String HASH_RING_URL = "https://api.github.com/repos/%s/%s/contents/.db/hash/%s";
 
-    public static final String BLOOM_FILTER_URL = "https://api.github.com/repos/%s/%s/contents/.db/bloom";
+    public static final String BLOOM_FILTER_READ_URL = "https://api.github.com/repos/%s/%s/git/blobs/%s";
+
+    public static final String BLOOM_FILTER_WRITE_URL = "https://api.github.com/repos/%s/%s/contents/.db/%s";
+
+    public static final String BLOOM_SHA_URL = "https://api.github.com/repos/%s/%s/contents/.db/bloom-sha";
 
     public static final String DATE_FILE_FORMAT = "yyyy-MMMM-dd";
 
     public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat (DATE_FILE_FORMAT);
+
+    public static final String SYNC_MESSAGE = "SYNCED on %s";
 
 }
