@@ -38,7 +38,7 @@ public class Utils {
         StringBuilder sb = new StringBuilder();
         for (FlashCard fc : response.cards()) {
             for (String tag : fc.tags()) {
-                sb.append(tag).append(COMMA);
+                sb.append(tag).append(COMMA).append(SPACE);
             }
         }
         return sb.toString();
