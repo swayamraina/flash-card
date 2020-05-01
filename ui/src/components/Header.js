@@ -1,11 +1,14 @@
 import React from 'react';
 
+import '../styles/Header.css'
 
 
 function Header() {
 
 	return (
-		'header'
+		<h2>
+			<span>FLASH</span> CARD
+		</h2>
 	);
 	
 }

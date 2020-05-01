@@ -1,0 +1,17 @@
+h2 {
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: 300;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    color: black;
+  }
+
+  h2 span {
+    border: 3px solid black;
+    background-color: rgb(75, 197, 197);
+    padding: 3px 2px 3px 7px;
+    border-radius: 6px;
+    font-weight: 400;
+  }
