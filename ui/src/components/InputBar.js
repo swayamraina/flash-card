@@ -7,8 +7,8 @@ import '../styles/InputBar.css'
 function InputBar(props) {
 
 	return (
-		<div>
-			<input id="tag-bar" onKeyPress={props.onKeyPress} />
+		<div className="tag-bar">
+			<input onKeyPress={props.onKeyPress} />
 		</div>
 	);
 	
