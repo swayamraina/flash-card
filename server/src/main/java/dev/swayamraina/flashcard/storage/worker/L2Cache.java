@@ -12,16 +12,13 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Service public class L2Cache {
 
+
     private Memory memory;
-    public Memory memory () { return memory; }
-
-
-    @Autowired L2Cache () {
-        this.memory = new Memory();
-    }
+    @Autowired L2Cache () { this.memory = new Memory(); }
 
 
     public SCode add (String url, Date today) {
@@ -46,16 +43,19 @@ import java.util.List;
         memory.today().clear();
     }
 
+
     public boolean exists (String url) {
         boolean exists = memory.today().contains(url);
-        if (!exists) memory.monthHolder().exists(url);
-        if (!exists) memory.yearHolder().exists(url);
+        if (!exists)
+            memory.monthHolder().exists(url);
+        if (!exists)
+            memory.yearHolder().exists(url);
         return exists;
     }
 
+
     public List<String> get (int offset) {
         List<String> urls = new ArrayList<>();
-
         if (0 == offset)
             urls.addAll(memory.today());
 
@@ -63,11 +63,14 @@ import java.util.List;
             CircularBuffer<Day> month = memory.month();
             int pointer = month.pointer();
             int query = pointer - offset;
-            if (0 > query) query += month.size();
-            urls.addAll(month.get(query).get());
+            if (0 > query)
+                query += month.size();
+            if (Objects.nonNull(month.get(query)))
+                urls.addAll(month.get(query).get());
         }
 
         return urls;
     }
+
 
 }
