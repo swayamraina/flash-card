@@ -2,8 +2,11 @@
     display: inline-flex;
     flex-wrap: wrap;
     margin: 5px;
-    padding: 3px 6px 3px 6px;
-    background-color: rgb(200, 200, 200);
+    padding: 3px 4px 3px 6px;
+    background-color: rgb(75, 197, 197);
     float: left;
     border-radius: 35px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: black;
 }
