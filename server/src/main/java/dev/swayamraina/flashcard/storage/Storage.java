@@ -1,9 +1,9 @@
 package dev.swayamraina.flashcard.storage;
 
+import dev.swayamraina.flashcard.storage.worker.BloomFilter;
 import dev.swayamraina.flashcard.storage.worker.ExternalFile;
 import dev.swayamraina.flashcard.storage.worker.HashRing;
 import dev.swayamraina.flashcard.storage.worker.L2Cache;
-import dev.swayamraina.flashcard.storage.worker.L1Cache;
 import dev.swayamraina.flashcard.web.response.vo.FlashCard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,13 +13,15 @@ import java.util.List;
 
 @Service public class Storage {
 
-    private L1Cache l1cache;
+
+    private BloomFilter l1cache;
     private L2Cache l2cache;
     private HashRing hashRing;
     private ExternalFile file;
 
+
     @Autowired public Storage (
-            L1Cache l1cache,
+            BloomFilter l1cache,
             L2Cache l2cache,
             HashRing hashRing,
             ExternalFile file) {
@@ -29,6 +31,7 @@ import java.util.List;
         this.hashRing = hashRing;
         this.file = file;
     }
+
 
     public SCode add (FlashCard card) {
         SCode code = SCode.SAVED;
@@ -45,8 +48,9 @@ import java.util.List;
         return code;
     }
 
+
     public boolean exists (String url, boolean deep) {
-        boolean exists = l1cache.exists(url);
+        boolean exists = l1cache.contains(url);
         if (exists) {
             exists = l2cache.exists(url);
             if (deep && !exists) exists = hashRing.exists(url);
@@ -54,8 +58,8 @@ import java.util.List;
         return exists;
     }
 
-    public List<String> get (int offset) {
-        return l2cache.get(offset);
-    }
+
+    public List<String> get (int offset) { return l2cache.get(offset); }
+
 
 }
