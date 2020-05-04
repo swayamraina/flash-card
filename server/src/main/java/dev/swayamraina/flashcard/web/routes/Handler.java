@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 
+@CrossOrigin
 @RequestMapping (Routes.BASE_URL)
 @RestController public class Handler {
 
