@@ -10,10 +10,11 @@ function InputContainer() {
 	const [ tags, setTags ] = useState([])
 
 	const handleKeyPress = (event) => {
+		// eslint-disable-next-line default-case
 		switch (event.key) {
-			case ' ': 		handleSpace(event); break
-			case 'Enter': 	handleEnter(event); break
-			default:		
+			case 'Enter': 	handleEnter(event); 
+			// eslint-disable-next-line no-fallthrough
+			case ' ': 		handleSpace(event);
 		}
 	}
 
@@ -43,7 +44,6 @@ function InputContainer() {
 			}),
 		}).then(response => response.json)
 		  .then(handleSaveSuccess, handleSaveError)
-		
 	}
 
 	const handleEnter = (event) => {
@@ -54,7 +54,6 @@ function InputContainer() {
 			function(tabs) { handleChromeQuery(tabs[0].url) }
 		);
 		/* eslint-enable no-undef */
-		event.target.value = ''
 	}
 
 	const handleClose = (index) => {
