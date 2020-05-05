@@ -25,8 +25,16 @@ function InputContainer() {
 		event.target.value = ''
 	}
 
+
+
 	const handleEnter = (event) => {
-		console.log('save to fc')
+		console.log('enter')
+		/* eslint-disable no-undef */
+		chrome.tabs.query (
+			{active: true, currentWindow: true}, 
+			function(tabs) { handleChromeQuery(tabs[0].url) }
+		);
+		/* eslint-enable no-undef */
 		event.target.value = ''
 	}
 
@@ -39,6 +47,7 @@ function InputContainer() {
 	return (
 		<div>
             <InputBar onKeyPress={handleKeyPress} />
+			<br/>
 			<TagsContainer tags={tags} onClose={handleClose} />
         </div>
 	)
