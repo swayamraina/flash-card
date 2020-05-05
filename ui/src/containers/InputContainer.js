@@ -25,7 +25,26 @@ function InputContainer() {
 		event.target.value = ''
 	}
 
+	const handleSaveSuccess = (response) => {
+		console.log('success')
+	}
 
+	const handleSaveError = (response) => {
+		console.log('error')
+	}
+
+	const handleChromeQuery = (url) => {
+		fetch('http://localhost:9090/flashcard/add', {
+			method: 'POST',
+			headers: {'Content-Type': 'application/json'},
+			body: JSON.stringify ({
+				"url": url,
+				"tags": tags
+			}),
+		}).then(response => response.json)
+		  .then(handleSaveSuccess, handleSaveError)
+		
+	}
 
 	const handleEnter = (event) => {
 		console.log('enter')
