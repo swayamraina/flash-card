@@ -1,14 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Container from './containers/Container'
 
 
 
-function App() {
+function App () {
+
+  const [ loading, setLoading ] = useState(false)
+  const [ success, setSuccess ] = useState(-1)
+
   return (
     <div>
-      <Container />
+        <Container 
+            loading={loading} setLoading={setLoading} 
+            success={success} setSuccess={setSuccess} 
+        />
     </div>
   );
+
 }
 
 export default App;
