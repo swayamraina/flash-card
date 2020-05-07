@@ -5,16 +5,17 @@ import TagsContainer from './TagsContainer'
 
 
 
-function InputContainer() {
+function InputContainer (props) {
 
 	const [ tags, setTags ] = useState([])
 
 	const handleKeyPress = (event) => {
-		// eslint-disable-next-line default-case
 		switch (event.key) {
 			case 'Enter': 	handleEnter(event); 
 			// eslint-disable-next-line no-fallthrough
 			case ' ': 		handleSpace(event);
+			// eslint-disable-next-line no-fallthrough
+			default: 		break;
 		}
 	}
 
@@ -26,15 +27,27 @@ function InputContainer() {
 		event.target.value = ''
 	}
 
+	const handleError = () => {
+		props.setLoading(false)
+		props.setSuccess(0)
+	}
+
+	const handleSuccess = (response) => {
+		response.data ? handleSaveSuccess() : handleSaveError()
+	}
+
 	const handleSaveSuccess = (response) => {
-		console.log('success')
+		props.setLoading(false)
+		props.setSuccess(1)
 	}
 
 	const handleSaveError = (response) => {
-		console.log('error')
+		props.setLoading(false)
+		props.setSuccess(0)
 	}
 
 	const handleChromeQuery = (url) => {
+		props.setLoading(true)
 		fetch('http://localhost:9090/flashcard/add', {
 			method: 'POST',
 			headers: {'Content-Type': 'application/json'},
@@ -42,12 +55,12 @@ function InputContainer() {
 				"url": url,
 				"tags": tags
 			}),
-		}).then(response => response.json)
-		  .then(handleSaveSuccess, handleSaveError)
+		}).then(response => response.json())
+		  .then((data) => handleSuccess(data), () => handleError())
+		  .then(setTimeout(() => { props.setSuccess(-1) }, 1500))
 	}
 
 	const handleEnter = (event) => {
-		console.log('enter')
 		/* eslint-disable no-undef */
 		chrome.tabs.query (
 			{active: true, currentWindow: true}, 
