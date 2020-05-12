@@ -4,8 +4,7 @@ import Header from '../components/Header'
 import InputContainer from './InputContainer';
 import Success from '../components/Success'
 import Failure from '../components/Failure'
-
-import '../styles/Container.css'
+import Loader from '../components/Loader'
 
 
 
@@ -13,12 +12,7 @@ function Container (props) {
 	
 	const loadingScreen = () => {
 		return (
-			<div className="lds-ellipsis">
-				<div></div>
-				<div></div>
-				<div></div>
-				<div></div>
-			</div>
+			<Loader />
 		);
 	}
 
