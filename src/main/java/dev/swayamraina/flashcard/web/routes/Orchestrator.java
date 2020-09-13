@@ -28,12 +28,9 @@ import java.util.List;
         return QCode.SUCCESS == code;
     }
 
-    public List<String> get (int offset) {
-        return storage.get(offset);
-    }
 
     public Boolean exists (String url) {
-        return storage.exists(url, false);
+        return storage.exists(url, true);
     }
 
 

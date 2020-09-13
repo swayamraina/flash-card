@@ -38,15 +38,6 @@ import java.util.Objects;
     }
 
 
-    @GetMapping (Routes.APP.GET_LINKS) public Response<List<String>> get (
-            @RequestParam ("offset") int offset) {
-
-        if (0 > offset) offset = 0;
-        List<String> urls = orchestrator.get(offset);
-        return new Response<>(urls);
-    }
-
-
     @GetMapping (Routes.APP.LINK_EXISTS) public Response<Boolean> exists (
             @RequestParam ("url") String url) {
 

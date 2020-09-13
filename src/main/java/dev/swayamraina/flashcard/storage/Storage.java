@@ -15,19 +15,16 @@ import java.util.List;
 
 
     private BloomFilter l1cache;
-    private L2Cache l2cache;
     private HashRing hashRing;
     private ExternalFile file;
 
 
     @Autowired public Storage (
             BloomFilter l1cache,
-            L2Cache l2cache,
             HashRing hashRing,
             ExternalFile file) {
 
         this.l1cache = l1cache;
-        this.l2cache = l2cache;
         this.hashRing = hashRing;
         this.file = file;
     }
@@ -42,8 +39,6 @@ import java.util.List;
                 code = hashRing.add(card.url());
             if (SCode.SAVED_TO_HASH_RING == code)
                 code = l1cache.add(card.url());
-            if (SCode.SAVED_TO_BLOOM_FILTER == code)
-                code = l2cache.add(card.url(), today);
         }
         return code;
     }
@@ -51,15 +46,13 @@ import java.util.List;
 
     public boolean exists (String url, boolean deep) {
         boolean exists = l1cache.contains(url);
-        if (exists) {
-            exists = l2cache.exists(url);
-            if (deep && !exists) exists = hashRing.exists(url);
-        }
+        if (deep && !exists)
+            exists = hashRing.exists(url);
+
         return exists;
     }
 
 
-    public List<String> get (int offset) { return l2cache.get(offset); }
 
 
 }
