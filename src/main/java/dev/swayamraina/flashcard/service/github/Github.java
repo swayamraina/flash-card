@@ -3,7 +3,7 @@ package dev.swayamraina.flashcard.service.github;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.swayamraina.flashcard.service.github.entity.Config;
+import dev.swayamraina.flashcard.service.github.entity.GithubConfig;
 import dev.swayamraina.flashcard.service.github.entity.Resource;
 import dev.swayamraina.flashcard.service.github.entity.ResourceResponse;
 import dev.swayamraina.flashcard.service.github.request.Committer;
@@ -31,12 +31,12 @@ import static dev.swayamraina.flashcard.utils.Constants.*;
     public static final Resource NO_RESOURCE = new Resource (GCode.DOES_NOT_EXISTS, EMPTY, EMPTY);
 
 
-    private Config config;
+    private GithubConfig config;
     private Committer committer;
     private ObjectMapper mapper;
 
 
-    @Autowired public Github (Config config) {
+    @Autowired public Github (GithubConfig config) {
         this.config = config;
         this.committer = new Committer(config.username(), config.email());
         this.mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
