@@ -6,7 +6,7 @@ import org.springframework.context.annotation.PropertySource;
 
 
 @Configuration @PropertySource(value = "classpath:github.properties")
-public class Config {
+public class GithubConfig {
 
     @Value("${github.username}") private String username;
     public String username () { return username; }

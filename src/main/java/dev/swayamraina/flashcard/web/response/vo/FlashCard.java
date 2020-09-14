@@ -6,6 +6,10 @@ import java.util.List;
 
 public class FlashCard {
 
+    private String title;
+    public String title () { return title; }
+    public String getTitle () { return title; }
+
     private String url;
     public String url () { return url; }
     public String getUrl () { return url; }
@@ -18,7 +22,8 @@ public class FlashCard {
 
     private FlashCard () {}
 
-    public FlashCard (String url, List<String> tags) {
+    public FlashCard (String title, String url, List<String> tags) {
+        this.title = title;
         this.url = url;
         this.tags = tags;
     }

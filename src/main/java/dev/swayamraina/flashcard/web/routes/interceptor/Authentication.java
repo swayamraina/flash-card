@@ -1,7 +1,6 @@
 package dev.swayamraina.flashcard.web.routes.interceptor;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -15,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
     private Config config;
 
-    @Autowired public Authentication (@Qualifier ("auth") Config config) { this.config = config; }
+    @Autowired public Authentication (Config config) { this.config = config; }
 
 
     @Override public boolean preHandle (

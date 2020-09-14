@@ -7,6 +7,7 @@ import dev.swayamraina.flashcard.service.github.entity.Resource;
 import dev.swayamraina.flashcard.service.github.request.Request;
 import dev.swayamraina.flashcard.storage.SCode;
 import dev.swayamraina.flashcard.utils.Utils;
+import dev.swayamraina.flashcard.web.routes.interceptor.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,7 @@ import static dev.swayamraina.flashcard.utils.Constants.EMPTY;
 
 
     private Github github;
+    private Config config;
     private Container container;
     private HashFunction function1, function2, function3;
     private Thread daemon;
@@ -42,30 +44,39 @@ import static dev.swayamraina.flashcard.utils.Constants.EMPTY;
     };
 
 
-    @Autowired public BloomFilter (Github github) {
-        function1 = Hashing.murmur3_32(seed1);
-        function2 = Hashing.murmur3_32(seed2);
-        function3 = Hashing.murmur3_32(seed3);
+    @Autowired public BloomFilter (Github github, Config config) {
         this.github = github;
-        this.container = this.deserialize();
+        this.config = config;
 
-        this.daemon = new Thread(task);
-        this.daemon.start();
+        if (config.bloom()) {
+            function1 = Hashing.murmur3_32(seed1);
+            function2 = Hashing.murmur3_32(seed2);
+            function3 = Hashing.murmur3_32(seed3);
+            this.container = this.deserialize();
+            this.daemon = new Thread(task);
+            this.daemon.start();
+        }
     }
 
 
     synchronized public SCode add (String url) {
-        set(hash(function1, url));
-        set(hash(function2, url));
-        set(hash(function3, url));
+        if (config.bloom()) {
+            set(hash(function1, url));
+            set(hash(function2, url));
+            set(hash(function3, url));
+        }
         return SCode.SAVED_TO_BLOOM_FILTER;
     }
 
 
     synchronized public boolean contains (String url) {
-        return get(hash(function1, url)) &&
-                    get(hash(function2, url)) &&
-                        get(hash(function3, url));
+        boolean exists = false;
+        if (config.bloom()) {
+            exists = get(hash(function1, url)) &&
+                        get(hash(function2, url)) &&
+                            get(hash(function3, url));
+        }
+        return exists;
     }
 
 
