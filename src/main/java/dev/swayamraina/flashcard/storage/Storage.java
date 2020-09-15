@@ -1,15 +1,13 @@
 package dev.swayamraina.flashcard.storage;
 
 import dev.swayamraina.flashcard.storage.worker.BloomFilter;
-import dev.swayamraina.flashcard.storage.worker.ExternalFile;
+import dev.swayamraina.flashcard.storage.worker.file.ExternalFile;
 import dev.swayamraina.flashcard.storage.worker.HashRing;
-import dev.swayamraina.flashcard.storage.worker.L2Cache;
 import dev.swayamraina.flashcard.web.response.vo.FlashCard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
 
 @Service public class Storage {
 
