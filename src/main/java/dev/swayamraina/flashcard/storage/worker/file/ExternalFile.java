@@ -9,6 +9,7 @@ import dev.swayamraina.flashcard.web.routes.interceptor.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.Optional;
 
@@ -23,6 +24,19 @@ import java.util.Optional;
     }
 
     public SCode add (FlashCard card, Date today) {
+        Type t;
+        try { t = Type.valueOf(config.format()); }
+        catch (IllegalArgumentException e) { t = Type.JSON; }
+        switch (t) {
+            case JSON:      return addAsJson(card, today);
+            case README:    throw new UnsupportedOperationException();
+            case HTML:      throw new UnsupportedOperationException();
+        }
+        return SCode.ERROR;
+    }
+
+
+    private SCode addAsJson (FlashCard card, Date today) {
         boolean exists;
         String api = github.resourceUrl(today);
         Optional<Resource> resource = github.read(api);
