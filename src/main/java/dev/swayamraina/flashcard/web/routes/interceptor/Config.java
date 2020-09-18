@@ -16,4 +16,7 @@ public class Config {
     @Value("${enable.bloom}") private boolean bloom;
     public boolean bloom () { return bloom; }
 
+    @Value("${storage.format}") private String format;
+    public String format () { return format; }
+
 }
